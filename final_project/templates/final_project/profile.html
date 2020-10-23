@@ -1,0 +1,144 @@
+{% extends "final_project/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+    <style>
+        body{
+            background-image: url('https://api.time.com/wp-content/uploads/2020/03/gym-coronavirus.jpg?quality=85&w=1024&h=512&crop=1');
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+            background-size: 100% 100%;
+        }
+        .profile_card{
+            position: relative;
+            background: rgba(180, 180, 180, 0.9);
+            top: 30px;
+            filter: brightness(130%);
+        }
+        #_profile{
+            color: white;
+        }
+        #secondary{
+            color: purple;
+        }
+    </style>
+
+    <div class="container profile_card content-section">
+        <div id="alert" class="container alert alert-danger" style="display: none;">Must be logged in as either a professional or special user</div>
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.pic.url }}">
+            <div class="media-body">
+                <h2 id="username_prof" class="account-heading">{{ user.username }}</h2>
+                <p id="secondary">{{ user.email }}</p>
+                {% if not user.special_user and not user.professional %}
+                    <button id="member-btn" type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#member-upgrade" style="position: relative; bottom: 20px; border-radius: 20px;">Upgrade Membership</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-0 animate__animated animate__fadeInUp">
+                        {{ form.username|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mb-0 animate__animated animate__fadeInUp">
+                        {{ form.email|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-0 animate__animated animate__fadeInUp animate__delay-1s">
+                        {{ form.height|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mb-0 animate__animated animate__fadeInUp animate__delay-1s">
+                        {{ form.weight|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-group col-md-12 mb-0 animate__animated animate__fadeInUp animate__delay-2s">
+                    {{ form.age|as_crispy_field }}
+                </div>
+                <div class="custom-file">
+                    {{ form.pic }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-info float-right" type="submit" style="position: relative; bottom: 20px; border-radius: 20px;">Update</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="member-upgrade" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Upgrade your Membership ($2.99)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="paypal-button-container" style="margin-top: 50px;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Maybe Later</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JS function used let user know that the gym logs can't be accessed unless you're special or professional user
+        nav_disable = document.querySelector('#nav-disabled')
+        nav_disable.addEventListener('click', () => {
+            document.querySelector('#alert').style.display = 'block';
+
+            setTimeout(function() {
+                $('#alert').fadeOut('slow');
+            }, 1500);
+        })
+    </script>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=ASgASevoTI9RURMpoNhtRngP2agksZnm0-T_l6_rpzJX0djkApSbU0Ju0Ph67iRPygPf2xioz_HgD7Rb&currency=USD"></script>
+    <script>
+        // Function used to implement PayPal
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                label: 'pay',
+                height: 40,
+            },
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '2.99'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    $('#member-btn').fadeOut('slow');
+
+                    fetch(`/member_upgrade`, {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            username: document.querySelector('#username_prof').innerHTML
+                        })
+                    });
+
+                    // Show a success message to the buyer
+                    alert('Transaction completed!, thank you for your purchase!');
+                });
+            }
+    }).render('#paypal-button-container');
+    </script>
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "final_project/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <script type="text/javascript">
+        // Script used for the loading screen at refresh of webpage
+        $(window).on('load',function(){
+            setTimeout(function() {
+                $('.main-loader').fadeOut('slow');
+                $('.login-form').fadeIn('slow');
+            }, 250);
+        });
+    </script>
+
+    <style>
+        #_register{
+            color: white;
+        }
+        body{
+            background-image: url("https://wallpaperset.com/w/full/c/4/8/45474.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+            background-size: 100% 100%;
+        }
+        .container{
+            position: relative;
+            margin-top: 50px;
+            margin-bottom: 100px;
+            max-width: 50%;
+            padding: 16px;
+            background: rgba(180, 180, 180, 0.9);
+            filter: brightness(110%);
+        }
+        .login-form{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: whitesmoke;
+        }
+        .btn{
+            background-color: rgb(1, 39, 143);
+            border: 1px solid #563d7c;
+        }
+        .btn:hover{
+            background-color: rgb(28, 81, 224);
+            border: 1px solid #563d7c;
+        }
+        .active {
+            display: block;
+        }
+
+        @media (max-width: 576px) {
+            .container{
+                max-width: 75%;
+            }
+        }
+    </style>
+
+    <div class="main-loader">
+        <span class="main-loader2"><span class="loader-inner"></span></span>
+    </div>
+    
+    <div class="login-form" style="display: none;">
+        <form class="container" action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+
+            <h1>Register</h1>
+            <hr>
+            {% if message %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %}
+                
+            <div class="form-group">
+                <label for="username"><b>Username</b></label>
+                <input id="username-check" type="text" placeholder="Enter Username" name="username" class="form-control" required autofocus>
+                <div id="invalid-feedback" class="invalid-feedback" style="display: none;">Username already exists and/or invalid.</div>
+                <div id="valid-feedback" class="valid-feedback" style="display: none;">Looks Good!</div>
+            </div>
+
+            <div class="form-group">
+                <label for="username"><b>Email</b></label>
+                <input type="text" placeholder="Enter Username" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password"><b>Password</b></label>
+                <input id="pass" type="password" placeholder="Enter Password" name="password" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password"><b>Confirm Password</b></label>
+                <input id="pass-confirm" type="password" placeholder="Confirm Password" name="confirmation" class="form-control" required>
+            </div>
+
+            <div id="selection-user" class="form-group">
+                <label for="pick-user"><b>Pick Type of User</b></label>
+                <select id="pick-user" class="form-control" name="pick-user" onchange=selection()>
+                    <option selected value="Free">Normal User (Free)</option>
+                    <option value="Paid">Special User ($2.99)</option>
+                    <option value="Professional">Professional User</option>
+                </select>
+            </div>
+
+            <div id="cv-upload" class="form-group" style="display: none;">
+                <label for="cv-attach"><b>Link to CV or LinkedIn</b></label>
+                <input id="cv-attach" class="form-control" type="url" name="cv" placeholder="Enter link to your CV or LinkedIn">
+                <small>Note: Usually takes 3-5 business days to get approved by an admin.</small>
+            </div>
+
+            <div id="paypal-button-container" style="margin-top: 50px; display: none;"></div>
+
+
+            <button id="register" type="submit" class="btn btn-primary" style="border-radius: 20px; margin-top: 10px;">Register</button>
+            <hr>
+            Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+        </form>
+    </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=ASgASevoTI9RURMpoNhtRngP2agksZnm0-T_l6_rpzJX0djkApSbU0Ju0Ph67iRPygPf2xioz_HgD7Rb&currency=USD"></script>
+    <script src="{% static 'final_project/registration.js' %}"></script>
+
+{% endblock %}

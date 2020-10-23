@@ -1,0 +1,88 @@
+{% extends "final_project/layout.html" %}
+
+{% block body %}
+    <script type="text/javascript">
+        $(window).on('load',function(){
+            setTimeout(function() {
+                $('.main-loader').fadeOut('slow');
+                $('.login-form').fadeIn('slow');
+            }, 500);
+        });
+    </script>
+
+    <style>
+        #_login{
+            color: white;
+        }
+        body{
+            background-image: url("https://wallpaperset.com/w/full/c/4/8/45474.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+            background-size: 100% 100%;
+        }
+        .container{
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+            max-width: 50%;
+            padding: 16px;
+            background: rgba(180, 180, 180, 0.9);
+            filter: brightness(110%);
+        }
+        .login-form{
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: whitesmoke;
+        }
+        .btn{
+            background-color: rgb(1, 39, 143);
+            border: 1px solid #563d7c;
+        }
+        .btn:hover{
+            background-color: rgb(28, 81, 224);
+            border: 1px solid #563d7c;
+        }
+
+        @media (max-width: 576px) {
+            .container{
+                max-width: 75%;
+            }
+        }
+    </style>
+
+    <div class="main-loader">
+        <span class="main-loader2"><span class="loader-inner"></span></span>
+    </div>
+
+    <div class="login-form" style="display: none;">
+        <form class="container" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+
+            <h1>Login</h1>
+            {% if message %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %}
+                
+            <div class="form-group">
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" class="form-control" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-rounded" style="border-radius: 20px;">Login</button>
+            <hr>
+            Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+        </form>
+    </div>
+        
+{% endblock %}

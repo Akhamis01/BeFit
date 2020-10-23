@@ -1,0 +1,319 @@
+body{
+    background-color: rgb(251, 255, 254);
+    font-family: 'Perpetua';
+}
+
+.fontt{
+    font-size: 13px;
+}
+
+#recipe_search{
+    opacity: 1;
+    transition: opacity 1500ms;
+    margin: 2rem;
+}
+
+#recipe_search.show, #carousel-innerid.show{
+    opacity: 0;
+}
+
+#carousel-innerid{
+    opacity: 1;
+    transition: opacity 1500ms;
+}
+
+.recipe_q{
+    margin-top: 2rem;
+}
+
+#search{
+    font-size: 0.65rem;
+}
+
+.btn-recipe{
+    opacity: 0;
+    display: block;
+}
+
+#card-recipe{
+    transition: transform .2s;
+}
+
+#card-recipe:hover{
+    transform: scale(1.15);
+}
+
+#card-recipe:hover .btn-recipe{
+    opacity: 1;
+    transition: 0.6s ease;
+}
+
+.card-body{
+    min-height: 161px;
+}
+
+.card-title{
+    text-align: center;
+    font-size: medium;
+    font-style: italic;
+    font-family: sans-serif;
+}
+
+.content-section{
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.account-img{
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}
+
+.account-heading{
+    font-size: 2.5rem;
+}
+
+#index_btn{
+    margin-right: 0.5rem;
+}
+
+.asteriskField{
+    display: none;
+}
+
+#carousel-food{
+    margin-left: 15%;
+    top: 10px;
+    border: 3px solid black;
+    margin-bottom: 30px;
+    transition: transform .2s;
+    width: 70%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.473), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#carousel-food:hover{
+    transform: scale(1.1);
+}
+
+#food-img{
+    width: 100%;
+    height: 350px;
+}
+
+#caption{
+    bottom: 2px;
+    width: 65%;
+}
+
+.parg{
+    margin: 0;
+}
+
+#piechart{
+    margin-left: 30%;
+    margin-top: 30px;
+}
+
+#weight-goal{
+    margin-left: 35%;
+    margin-top: 30px;
+}
+
+
+#piechart{
+    margin-left: 17%;
+    margin-top: 30px;
+}
+
+canvas{
+    width: 200px;
+    height: 200px;
+}
+
+.load-wrapper{
+    margin: 20px;
+}
+
+.load-wrapper1{
+    margin: 40px;
+}
+
+.load-wrapper2{
+    margin-bottom: 30px;
+}
+/*  */
+
+.coms{
+    color: purple; 
+    font-size: 25px;
+     margin-left: 25%; 
+}
+
+.upvote, .downvote{
+    font-size: 30px;
+}
+
+.post-img{
+    height: 100px;
+    width: 125px;
+    margin-bottom: 16px;
+}
+
+.tot_likes{
+    font-size: 12px;
+}
+
+.card-mg{
+    margin-top: 70px;
+}
+
+.gymming-card{
+    margin-left: 10%;
+}
+
+.log-card{
+    width: 50%;
+    margin-left: 25%;
+}
+
+
+  /* This is used to acheive the Mobile Responsiveness */
+  @media (max-width: 576px) {
+    .coms{
+        color: purple; 
+        font-size: 12px;
+         margin-left: 0; 
+    }
+
+    .tot_likes{
+        font-size: 10px;
+    }
+
+    .upvote, .downvote{
+        font-size: 20px;
+    }
+
+    .post-img{
+        height: 75px;
+        width: 100px;
+    }
+    
+    .delete_btn{
+        font-size: 10px;
+    }
+
+    .card-mg{
+        margin-top: 50px;
+    }
+    
+    .gymming-card{
+        margin-left: 20%;
+    }
+
+    .log-card{
+        width: 82%;
+        margin-left: 10%;
+    }
+
+    #caption{
+        width: 70%;
+    }
+
+    #pieChart{
+        left: 100px;
+    }
+
+    canvas{
+        min-width: 125px;
+        min-height: 125px;
+    }
+
+    .w-text{
+        font-size: 14px;
+    }
+
+  }
+
+
+
+
+/* This is the CSS for the Loading Screen used at reload of the page */
+.main-loader{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #242f3f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    object-fit: fill;
+}
+
+.main-loader2 {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    border: 4px solid #Fff;
+    animation: main-loader2 2s infinite ease;
+  }
+  
+  .loader-inner {
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+    background-color: #fff;
+    animation: loader-inner 2s infinite ease-in;
+  }
+  
+  @keyframes main-loader2 {
+    0% {
+      transform: rotate(0deg);
+    }
+    
+    25% {
+      transform: rotate(180deg);
+    }
+    
+    50% {
+      transform: rotate(180deg);
+    }
+    
+    75% {
+      transform: rotate(360deg);
+    }
+    
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes loader-inner {
+    0% {
+      height: 0%;
+    }
+    
+    25% {
+      height: 0%;
+    }
+    
+    50% {
+      height: 100%;
+    }
+    
+    75% {
+      height: 100%;
+    }
+    
+    100% {
+      height: 0%;
+    }
+  }
+  /*  */

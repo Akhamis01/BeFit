@@ -1,0 +1,52 @@
+{% extends "final_project/layout.html" %}
+
+{% block body %}
+    <script>
+        // JS function used let user know that the gym logs can't be accessed unless you're special or professional user
+        nav_disable = document.querySelector('#nav-disabled')
+        nav_disable.addEventListener('click', () => {
+            document.querySelector('#alert').style.display = 'block';
+
+            setTimeout(function() {
+                $('#alert').fadeOut('slow');
+            }, 1500);
+        })
+    </script>
+
+    <style>
+        body{
+            background-image: url('https://mybayutcdn.bayut.com/mybayut/wp-content/uploads/fitness-terminal.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+            background-size: 100% 100%;
+        }
+        .jumbotron{
+            background: rgba(0,0,0,.5);
+        }
+        .front{
+            color: white;
+        }
+        #_home{
+            color: white;
+        }
+    </style>
+
+    <div id="alert" class="container alert alert-danger" style="display: none;">Must be logged in as either a professional or special user</div>
+
+    <div class="animate__animated animate__fadeInUp">
+        <div class="text-center jumbotron">
+            <h1 class="front">BeFit</h1>
+            <p class="lead front">We will help you get your dream body</p>
+            <p class="front">Click on one of the tabs in the navigation bar to start</p>
+            {% if user.is_authenticated %}
+                <a id="index_btn" href="{% url 'profile' %}" class="btn btn-outline-primary animate__animated animate__backInLeft animate__delay-1s" style="border-radius: 20px;">Edit Profile</a>
+                <a href="{% url 'recipe' %}" class="btn btn-outline-success btn animate__animated animate__backInRight animate__delay-1s" style="border-radius: 20px;">Nutrition</a>
+            {% else %}
+                <a id="index_btn" href="{% url 'register' %}" class="btn btn-outline-primary animate__animated animate__backInLeft animate__delay-1s" style="border-radius: 20px;">Register</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-success btn animate__animated animate__backInRight animate__delay-1s" style="border-radius: 20px;">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}

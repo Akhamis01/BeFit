@@ -1,0 +1,216 @@
+{% extends "final_project/layout.html" %}
+{% load static %}
+
+{% block add_script %}
+    <script src="{% static 'final_project/nutrition01.js' %}"></script>
+    <script type="text/javascript">
+        $(function(){
+           $('[rel="tooltip"]').tooltip();
+        });
+
+        $(window).on('load',function(){
+            setTimeout(function() {
+                $('.main-loader').fadeOut('slow');
+            }, 1250);
+            setTimeout(function() {
+                $('#main-content').fadeIn('slow');
+                $('.overall-background').fadeIn('slow');
+            }, 1500);
+        })
+    </script>
+{% endblock %}
+
+
+
+{% block body %}
+    <style>
+        #_recipe{
+            color: white;
+        }
+        .load-wrapper{
+            margin-bottom: 50px;
+        }
+        .inner-button{
+            min-width: 100%;
+        }
+        .overall-background{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-image: url(https://hhp-blog.s3.amazonaws.com/2015/11/bigstock-diet-brain-Food-For-Though-81817028.jpg);
+            background-size: 100% 100%;
+            filter: brightness(100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card img{
+            padding: 0.5rem;
+        }
+        .card{
+            background-color: rgb(224, 222, 222);
+            border-color: grey;
+            max-height: fit-content;
+            margin: 0.8rem;
+        }
+        .weight-card{
+            width: 50%;
+            margin-left: 25%;
+        }
+
+        @media (max-width: 576px) {
+            .weight-card{
+                width: 75%;
+                margin-left: 12%;
+            }
+        }
+    </style>
+
+    <div class="main-loader">
+        <span class="main-loader2"><span class="loader-inner"></span></span>
+    </div>
+
+    <div class="overall-background" style="display: none;">
+    </div>
+
+
+    <div id="main-content" style="display: none;">
+        <div id="alert" class="container alert alert-danger" style="display: none;">Must be logged in as either a professional or special user</div>
+        <h5 id="logged_in" style="display: none;">{{logged_in}}</h5>
+        <h5 id="current-weight" style="display: none;">{{weight}}</h5>
+        <h5 id="recom-calories" style="display: none;">{{recom_calories}}</h5>
+
+        <h2 class="card shadow p-2 rounded" style="text-align: center; font-style: italic; margin: 0; background: rgba(0,0,0,.5);"><span style="color: white;">Meal of the day!</span></h2>
+        <div id="carousel-food" class="carousel slide" data-ride="carousel">
+            <div id="carousel-innerid" class="carousel-inner">
+                <div class="carousel-item active">
+                    <img id="food-img" src="{{img}}" class="d-block w-100">
+                    <div id="caption" class="carousel-caption" style="background: rgba(0,0,0,.5);">
+                        <h5>{{label}}</h5>
+                        <p class="parg">Calories: {{calories}}</p>
+                        <p class="parg">Diet Label: {{diet}}</p>
+                    </div>
+                </div>
+            </div>
+            <a id="next-caro" class="carousel-control-next" href="#" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: brightness(150%);"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <div class="card weight-card shadow p-3 mb-5 bg-white rounded" style="border-top: 5px solid red;">
+            <h3 style="text-align: center;">Specific nutrients needed!</h3>
+            <hr>
+            <p class="w-text" style="text-align: center;">Input your weight goal, to get exact values of nutrients you should be consuming per day to maintain your weight.</p>
+            <div class="input-group col-lg-8 offset-lg-2 col-md-11 offset-md-1 col-sm-11 offset-sm-1 col-11 offset-1">
+                <input type="number" class="form-control" placeholder="Enter your weight goal!" id="weight-input">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button" id="weight-btn">Submit</button>
+                </div>
+            </div>
+            <div class="load-wrapper1" style="display: none;">
+                <div class="d-flex justify-content-center loader">
+                    <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="piechart" class="col-lg-8 offset-lg-2 col-md-11 offset-md-1 col-sm-11 offset-sm-1 col-11">
+            </div>
+
+            <div id="tips">
+            </div>
+        </div>
+
+        <!-- Acts as an <hr> -->
+        <h2 class="card shadow p-2 rounded" style="text-align: center; font-style: italic; margin: 0; background-color: rgb(223, 221, 221);"></h2>
+
+        <h3 class="card weight-card w-text shadow p-3 mb-5 bg-white rounded" style="font-style: italic; margin-top: 30px; border-top: 5px solid red;">Want to explore some more recipes? Use our advanced searchbar to find your favourite recipes!</h3>
+        <div class="recipe_q input-group col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-10 offset-sm-1 col-11 offset-1">
+            <input type="text" class="form-control" placeholder="Search for any recipe!" id="recipe_query">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" rel='tooltip' data-placement="top" title="Search" id="search">Search</button>
+                <button class="btn btn-outline-secondary" type="button" id="filter" data-toggle="modal" rel='tooltip' data-placement="top" title="Filter" data-target="#search-filter"><i class="fas fa-sliders-h"></i></button>
+            </div>
+        </div>
+
+    
+        <div class="modal fade" id="search-filter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Apply filters</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="input-group col-6 mb-0">
+                                <input style="margin-bottom: 1rem;" type="number" class="form-control" placeholder="Max number of ingredients!" id="ingr-filter">
+                            </div>
+
+                            <div class="input-group col-6 mb-0">
+                                <input type="number" class="form-control" placeholder="Min time to cook! (Mins)" id="time-filter">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-row">
+                            <div class="form-group col-6 mb-0">
+                                <label for="diet-filter">Input your diet!</label>
+                                <select id="diet-filter" class="form-control">
+                                    <option selected value="Any">Any</option>
+                                    <option value="balanced">Balanced</option>
+                                    <option value="high-protein">High Protein</option>
+                                    <option value="low-fat">Low Fat</option>
+                                    <option value="low-carb">Low Carb</option>
+                                    <option value="low-sodium">Low Sodium</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-6 mb-0">
+                                <label for="health-filter">Input your health labels!</label>
+                                <select id="health-filter" class="form-control">
+                                    <option selected value="Any">Any</option>
+                                    <option value="vegan">Vegan</option>
+                                    <option value="vegetarian">Vegetarian</option>
+                                    <option value="gluten-free">Gluten Free</option>
+                                    <option value="peanut-free">Peanut Free</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="apply-filter" type="button" class="btn btn-outline-info" data-dismiss="modal">Apply!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="load-wrapper" style="display: none;">
+            <div class="d-flex justify-content-center loader">
+                <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="recipe_search">
+        </div>
+
+        <div class="load-wrapper2" style="display: none;">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-grow" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

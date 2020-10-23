@@ -1,0 +1,173 @@
+{% extends "final_project/layout.html" %}
+{% load static %}
+
+{% block add_script %}
+    <script type="text/javascript">
+        $(function(){
+           $('[rel="tooltip"]').tooltip();
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <style>
+        #_discussions{
+            color: white;
+        }
+        .overall-background{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-image: url(https://cdn.hipwallpaper.com/i/62/34/n9xFYs.jpg);
+            background-size: 100% 100%;
+            filter: brightness(50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .post-img{
+            height: 100px;
+            width: 125px;
+            margin-bottom: 16px;
+        }
+    </style>
+
+    <div class="overall-background">
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Post View -->
+        <div id="post-card-{{ post.pk }}" class="card-main" style="margin: 10px;">
+            <div class="card shadow p-3 mb-5 bg-white rounded" style="padding: 1rem;">
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-4" style="border-right: 2px solid lightgrey;">
+                        {% if post.author.special_user %}
+                            <img rel='tooltip' data-placement="top" title="Special User" class="rounded-circle post-img" src="{{ post.author.pic.url }}" style="border-right: 10px solid purple;">
+                        {% elif post.author.professional %}
+                            <img rel='tooltip' data-placement="top" title="Professional User" class="rounded-circle post-img" src="{{ post.author.pic.url }}" style="border-right: 10px solid rgb(140, 252, 252);">
+                        {% else %}
+                            <img rel='tooltip' data-placement="top" title="Normal User" class="rounded-circle post-img" src="{{ post.author.pic.url }}" style="border-right: 10px solid lightgrey;">
+                        {% endif %}
+                        <strong><p id='vote_count-{{ post.pk }}' class="tot_likes" style="margin: 0;">Total Votes: {{ post.likes }}</p></strong>
+                    </div>
+                    <div class="col-lg-10 col-md-9 col-sm-8 col-8">
+                        <div class="post-data">
+                            <div style="font-size: medium;">
+                                <span style="color: rgb(94, 206, 206);">{{ post.author }} - </span>
+                                <small>{{ post.date|date:'F d, Y (P)' }}</small>
+                                {% if request.user == post.author %}
+                                    <small id="delete-{{ post.pk }}" class="btn btn-outline-danger delete_btn float-right" data-id="{{ post.pk }}">Delete Post</small>
+                                {% endif %}
+                                <strong><br>Flare: <span style="background-color: lightpink; padding: 5px; border-radius: 20px;">{{ post.flare }}</span><br></strong>
+                            </div>
+                            <hr>
+                            <p id="post-{{ post.pk }}" class="post-content">{{ post.content|safe }}</p>
+                            {% if post.author.professional and post.video_url != 'None' and post.video_url != '' %}
+                                <hr>
+                                <strong><p>Reference Video:</p></strong>
+                                <iframe width="80%" height="345px" src="{{ post.video_url }}" style="margin-left: 8%;"></iframe>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="card shadow p-2 rounded" style="text-align: center; font-style: italic; margin: 0; background-color: rgb(223, 221, 221);"></h2>
+
+
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'create_comment' request.user.username %}">
+                {% csrf_token %}
+                <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="padding: 1rem;">
+                    <strong><label for="post-text-id">Create New Comment:</label></strong>
+                    <textarea class="form-control" placeholder="What's on your mind?" rows="3" id="post-text-id" name="comment"></textarea>
+                    <textarea class="form-control" rows="1" name="post-id" style="display: none;">{{post.pk}}</textarea>
+                    <hr>
+                    <div class="row" style="margin: 5px;">
+                        <div class="col-1">
+                            <button type="submit" class="btn btn-outline-primary">Post</button>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border-top: 5px dashed lightgrey;">
+            </form>
+        {% endif %}
+
+
+        {% for spec_post in spec_posts %}
+            <div id="comment-card-{{spec_post.pk}}" class="card-main" style="margin: 10px;">
+                <div class="card shadow p-3 mb-5 bg-white rounded" style="padding: 1rem;">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-4" style="border-right: 2px solid lightgrey;">
+                            {% if spec_post.commenter.special_user %}
+                                <img rel='tooltip' data-placement="top" title="Special User" class="rounded-circle post-img" src="{{ spec_post.post.author.pic.url }}" style="border-right: 10px solid purple;">
+                            {% elif spec_post.commenter.professional %}
+                                <img rel='tooltip' data-placement="top" title="Professional User" class="rounded-circle post-img" src="{{ spec_post.post.author.pic.url }}" style="border-right: 10px solid rgb(140, 252, 252);">
+                            {% else %}
+                                <img rel='tooltip' data-placement="top" title="Normal User" class="rounded-circle post-img" src="{{ spec_post.post.author.pic.url }}" style="border-right: 10px solid lightgrey;">
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-10 col-md-9 col-sm-8 col-8">
+                            <div class="post-data">
+                                <div style="font-size: medium;">
+                                    <span style="color: rgb(94, 206, 206);">{{ spec_post.commenter }} - </span>
+                                    <small>{{ spec_post.date|date:'F d, Y (P)' }}</small>
+                                    {% if request.user == spec_post.commenter %}
+                                        <small id="delete-{{ post.pk }}" class="btn btn-outline-danger delete_btn float-right" data-id="{{ spec_post.pk }}">Delete Comment</small>
+                                    {% endif %}
+                                </div>
+                                <hr style="margin-top: 30px;">
+                                <p class="post-content">{{ spec_post.comment }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <script>
+        // JS function used for the delete button, for the comment section
+        document.addEventListener('DOMContentLoaded', function() {
+            temp1 = document.querySelectorAll(".delete_btn");
+
+            temp1.forEach(temp => {
+                delete_func(temp);
+            });
+        });
+
+        function delete_func(del){
+            del.addEventListener('click', () => {
+                //Get the post ID from the 'data-' attribute and query for elements using that ID
+                comment_id = del.getAttribute('data-id');
+                delete_button = document.querySelector(`#delete-${comment_id}`);
+                delete_post = document.querySelector(`#comment-card-${comment_id}`);
+
+                if(confirm("Are you sure you'd like to delete this comment?")) {
+                    check = true;
+                } else {
+                    check = false;
+                }
+
+                if(check == true){
+                    fetch('/delete_comment/', {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            id: comment_id,
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        delete_post.style.display = 'none'
+                    });
+                }
+            });
+        }
+    </script>
+
+{% endblock %}
