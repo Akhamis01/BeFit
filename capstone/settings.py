@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6y(l7b)k9@x@_xxa%9lhnkfh_-)ywr9xuyp9#4f_gl^_f_!s^g'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -128,6 +128,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # EDAMAM API Info
-APP_ID = 'e1de3558'
-API_KEY = '8e2f18e00792e779017af77b5ce98484'
+APP_ID = '' # Enter your APP ID
+API_KEY = '' # Enter your API Key
 
