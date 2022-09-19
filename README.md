@@ -2,7 +2,7 @@
 
 *In this project, I created a website that helps users, as the title suggests, **BeFit!**. So, essentially the website gives users the option to either check out recipes of any types of food wanted, create a fitness log, or enter a discussions forum with other users. Also, the user has the option to either register as a 'Free', 'Special', or 'Professional' user.*
 
-[Here is a Demo of my project](https://youtu.be/pv9qL7vmrKE)
+[Here is a Demo of my project](https://befitproject.herokuapp.com/)
 
 >*There are 6 main elements in my webpage (The **Landing Page**, **Profile Page**, **Nutrition Page**, **Fitness Logs Page**, and **Discussions Page**). Also, all files included use `'layoutt.css'` for CSS properties.*
 
